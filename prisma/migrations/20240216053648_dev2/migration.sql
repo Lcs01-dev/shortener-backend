@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Urls" ALTER COLUMN "totalClicks" DROP NOT NULL,
+ALTER COLUMN "totalClicks" SET DEFAULT 0;
