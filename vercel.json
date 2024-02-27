@@ -1,8 +1,18 @@
 {
+    "builds": [
+        {
+          "src": "src/main.ts",
+          "use": "@vercel/node"
+        },
+        {
+            "src": "dist/*",
+            "use": "@now/static"
+        }
+      ],
     "routes": [
         {
           "src": "/(.*)",
-          "dest": "main.js",
+          "dest": "src/main.ts",
           "methods": ["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"]
         }
       ]
