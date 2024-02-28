@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma-client/prisma-client.service';
 import { IGetIdUrl } from './app.dto';
 
@@ -7,6 +7,7 @@ export class AppService {
   constructor(private prisma: PrismaService) {}
 
   async getFullUrl(param: IGetIdUrl) {
+
     const url = await this.prisma.urls.findUnique({
       where: {
         shortLink: param.urlId,
@@ -14,7 +15,7 @@ export class AppService {
     });
 
     if (!url) {
-      return { fullUrl: undefined };
+      throw new NotFoundException()
     }
 
     await this.prisma.urls.update({
