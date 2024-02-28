@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LinkHandlerModule } from './modules/link-handler/link-handler.module';
 
 @Module({
-  imports: [PrismaClientModule, LinkHandlerModule,ConfigModule.forRoot()],
+  imports: [PrismaClientModule, LinkHandlerModule, ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],
 })
