@@ -1,5 +1,9 @@
 import { PrismaService } from '../../prisma-client/prisma-client.service';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import * as nanoid from 'nanoid';
 import { shortenLinkDto } from './dto/short-link.dto';
 @Injectable()
@@ -52,25 +56,31 @@ export class LinkHandlerService {
   }
 
   async patchShortLink(id: string, newShortLink: string) {
+    const regexUrlSafe = /^[a-zA-Z0-9\-_.~]+$/;
+
+    if (!regexUrlSafe.test(newShortLink)) {
+      throw new ForbiddenException(
+        'You can only use this special characters -_.~ to build your url',
+      );
+    }
     const shortLinkExists = await this.prisma.urls.findUnique({
       where: {
-        shortLink: newShortLink
-      }
-    })
+        shortLink: newShortLink,
+      },
+    });
 
-    if(shortLinkExists) {
-      throw new ConflictException("This Link has already been taken!")
+    if (shortLinkExists) {
+      throw new ConflictException('This Link has already been taken!');
     }
-
     const updated = await this.prisma.urls.update({
       where: {
         id: id,
       },
       data: {
         shortLink: newShortLink,
-      }
+      },
     });
 
-    return updated
+    return updated;
   }
 }
