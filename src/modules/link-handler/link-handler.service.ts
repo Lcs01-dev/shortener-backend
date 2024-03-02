@@ -4,7 +4,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import * as nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import { shortenLinkDto } from './dto/short-link.dto';
 @Injectable()
 export class LinkHandlerService {
@@ -12,8 +12,7 @@ export class LinkHandlerService {
   constructor(private prisma: PrismaService) {}
 
   async shortenLink(data: shortenLinkDto, linkSize: number = 5) {
-    const random = (await eval(`import('nanoid')`)) as typeof nanoid;
-    const randomId = random.nanoid(linkSize);
+    const randomId = nanoid(linkSize);
     const fullUrlExists = await this.prisma.urls.findFirst({
       where: {
         fullLink: { contains: data.fullLink },
